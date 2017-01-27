@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">RssReader</string>
+    <string name="add_rss_item">Add rss item</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Donec posuere gravida libero, sit amet congue nibh consectetur vitae.
+        Cras magna lorem, porta eu eros nec, convallis ultrices dolor.
+        Sed sollicitudin viverra faucibus. Pellentesque venenatis velit et ultrices eleifend.
+        Morbi tincidunt metus non consequat scelerisque. Integer posuere id tortor a elementum.
+        Cras quis lacus nulla. Cras eu justo in nisl condimentum aliquet.
+        Morbi rhoncus vulputate mi id aliquet. Aenean volutpat luctus dui id facilisis.
+        Sed eu commodo nibh. Morbi laoreet at diam finibus feugiat.
+        Nunc eleifend ante sit amet sem congue commodo.
+        Vivamus sollicitudin, nunc nec consequat pulvinar, sem sem tristique dui, sit amet luctus sem lorem in lectus.
+        Phasellus nec urna nunc. Etiam scelerisque tempus auctor.
+        Sed odio justo, ornare a rutrum sollicitudin, dignissim non dui.
+        Etiam a eleifend quam. Suspendisse blandit turpis velit, cursus finibus metus vehicula vel.
+        Duis sed lectus nibh.
+        Sed scelerisque, neque ac tristique porta, erat velit aliquet augue, ac molestie nisi elit id metus.
+        Pellentesque lacinia dictum posuere.</string>
+</resources>
