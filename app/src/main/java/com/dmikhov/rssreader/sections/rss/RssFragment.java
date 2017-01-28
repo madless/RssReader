@@ -1,4 +1,4 @@
-package com.dmikhov.rssreader.ui.rss;
+package com.dmikhov.rssreader.sections.rss;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -55,7 +55,7 @@ public class RssFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     }
 
     private void initPresenter() {
-        presenter = PresenterCache.get().getPresenter(Const.RSS_FRAGMENT_PRESENTER, getPresenterFactory());
+        presenter = PresenterCache.get().getPresenter(Const.RSS_FRAGMENT_PRESENTER + this.hashCode(), getPresenterFactory());
         presenter.onStart();
     }
 

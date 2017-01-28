@@ -1,4 +1,4 @@
-package com.dmikhov.rssreader.ui.rss;
+package com.dmikhov.rssreader.sections.rss;
 
 import com.dmikhov.rssreader.models.RssItem;
 

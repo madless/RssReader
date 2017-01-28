@@ -9,4 +9,37 @@
     <dimen name="item_rss_card_view_card_elevation">2dp</dimen>
     <dimen name="item_rss_image_width">120dp</dimen>
     <dimen name="item_rss_image_height">120dp</dimen>
+
+    <dimen name="item_menu_rss_icon_size">30dp</dimen>
+    <dimen name="item_menu_rss_margin_end_start">20dp</dimen>
+    <dimen name="item_menu_rss_margin_bottom_top">10dp</dimen>
+
+    <dimen name="nav_drawer_width">280dp</dimen>
+
+    <dimen name="font_5">5sp</dimen>
+    <dimen name="font_6">6sp</dimen>
+    <dimen name="font_7">7sp</dimen>
+    <dimen name="font_8">8sp</dimen>
+    <dimen name="font_9">9sp</dimen>
+    <dimen name="font_10">10sp</dimen>
+    <dimen name="font_11">11sp</dimen>
+    <dimen name="font_12">12sp</dimen>
+    <dimen name="font_13">13sp</dimen>
+    <dimen name="font_14">14sp</dimen>
+    <dimen name="font_15">15sp</dimen>
+    <dimen name="font_16">16sp</dimen>
+    <dimen name="font_17">17sp</dimen>
+    <dimen name="font_18">18sp</dimen>
+    <dimen name="font_19">19sp</dimen>
+    <dimen name="font_20">20sp</dimen>
+    <dimen name="font_21">21sp</dimen>
+    <dimen name="font_22">22sp</dimen>
+    <dimen name="font_23">23sp</dimen>
+    <dimen name="font_24">24sp</dimen>
+    <dimen name="font_25">25sp</dimen>
+    <dimen name="font_26">26sp</dimen>
+    <dimen name="font_27">27sp</dimen>
+    <dimen name="font_28">28sp</dimen>
+    <dimen name="font_29">29sp</dimen>
+    <dimen name="font_30">30sp</dimen>
 </resources>

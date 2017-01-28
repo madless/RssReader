@@ -1,4 +1,4 @@
-package com.dmikhov.rssreader.ui.rss;
+package com.dmikhov.rssreader.sections.rss;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;

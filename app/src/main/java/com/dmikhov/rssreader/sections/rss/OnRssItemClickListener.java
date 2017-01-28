@@ -1,4 +1,4 @@
-package com.dmikhov.rssreader.ui.rss;
+package com.dmikhov.rssreader.sections.rss;
 
 /**
  * Created by dmikhov on 27.01.2017.
