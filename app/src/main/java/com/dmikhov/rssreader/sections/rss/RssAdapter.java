@@ -1,7 +1,6 @@
 package com.dmikhov.rssreader.sections.rss;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
@@ -21,8 +20,6 @@ import com.bumptech.glide.request.target.Target;
 import com.dmikhov.rssreader.R;
 import com.dmikhov.rssreader.models.RssItem;
 import com.dmikhov.rssreader.utils.ImageLoader;
-
-import org.xml.sax.XMLReader;
 
 import java.util.List;
 
@@ -75,7 +72,7 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
         }
 
-        public void setData(RssItem item) {
+        public void setData(final RssItem item) {
             if(item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
                 progressBar.setVisibility(View.VISIBLE);
                 ImageLoader.loadImage(item.getImageUrl(), ivImage, new RequestListener<String, GlideDrawable>() {
@@ -97,27 +94,34 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
                 ivImage.setVisibility(View.GONE);
             }
             tvTitle.setText(item.getTitle());
-//            setTextViewHTML(tvDescription, item.getDescription());
-
-            tvDescription.setText(Html.fromHtml(item.getDescription(), null, new Html.TagHandler() {
-                public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
-                    ClickableSpan[] spans = output.getSpans(0, output.length(), ClickableSpan.class);
-                    if (spans != null) {
-                        for (ClickableSpan span : spans) {
-                            if (span instanceof URLSpan) {
-                                final URLSpan urlSpan = (URLSpan) span;
-                                output.setSpan(new ClickableSpan() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        onLinkClickListener.onLinkClicked(urlSpan.getURL());
-                                    }
-                                }, output.getSpanStart(span), output.getSpanEnd(span), output.getSpanFlags(span));
-                                output.removeSpan(span);
-                            }
-                        }
-                    }
+            setTextViewHTML(tvDescription, item.getDescription());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "on item Click: onLinkClicked: " + item.getLink());
+                    onLinkClickListener.onLinkClicked(item.getLink());
                 }
-            }));
+            });
+
+//            tvDescription.setText(Html.fromHtml(item.getDescription(), null, new Html.TagHandler() {
+//                public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
+//                    ClickableSpan[] spans = output.getSpans(0, output.length(), ClickableSpan.class);
+//                    if (spans != null) {
+//                        for (ClickableSpan span : spans) {
+//                            if (span instanceof URLSpan) {
+//                                final URLSpan urlSpan = (URLSpan) span;
+//                                output.setSpan(new ClickableSpan() {
+//                                    @Override
+//                                    public void onClick(View view) {
+//                                        onLinkClickListener.onLinkClicked(urlSpan.getURL());
+//                                    }
+//                                }, output.getSpanStart(span), output.getSpanEnd(span), output.getSpanFlags(span));
+//                                output.removeSpan(span);
+//                            }
+//                        }
+//                    }
+//                }
+//            }));
         }
     }
 
@@ -127,6 +131,7 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
         int flags = strBuilder.getSpanFlags(span);
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
+                Log.d(TAG, "onClick: onLinkClicked: " + span.getURL());
                 onLinkClickListener.onLinkClicked(span.getURL());
             }
         };

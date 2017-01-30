@@ -33,11 +33,11 @@ public class MainActivityPresenter extends BasePresenter {
                         public void call(List<RssFeed> rssFeeds) {
                             Log.d(TAG, "rssFeeds: " + rssFeeds);
                             feeds = rssFeeds;
-                            view.onCachedRssFeedsLoaded(feeds);
+                            view.onRssFeedsLoaded(feeds);
                         }
                     });
         } else {
-            view.onCachedRssFeedsLoaded(feeds);
+            view.onRssFeedsLoaded(feeds);
         }
     }
 

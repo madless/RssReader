@@ -4,12 +4,15 @@ import android.util.Log;
 
 import com.dmikhov.rssreader.models.RssFeed;
 import com.dmikhov.rssreader.models.RssItem;
+import com.dmikhov.rssreader.utils.DateHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import io.realm.RealmList;
 import rx.Observable;
@@ -40,22 +43,28 @@ public class NetRepository implements IExternalRepo {
                 RealmList<RssItem> rssItemList = new RealmList<>();
                 for (int i = 0; i < items.size(); i++) {
                     String itemCode = items.get(i).html();
-                    Document itemDoc = Jsoup.parseBodyFragment(itemCode);
-
+                    Document itemDoc = Jsoup.parse(itemCode, url, Parser.xmlParser()); //Jsoup.parseBodyFragment(itemCode);
                     String title = itemDoc.select("title").text();
+                    String link = itemDoc.select("link").text();
                     String description = itemDoc.select("description").text();
                     String pubDate = itemDoc.select("pubDate").text();
+                    long date = 0;
+                    try {
+                        date = DateHelper.getConvertedDate(pubDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     Document descriptionDoc = Jsoup.parseBodyFragment(description);
                     String img = descriptionDoc.select("img").attr("src");
 
                     description = description.replaceAll(IMAGE_PATTERN, "");
-                    RssItem rssItem = new RssItem(title, img, description, 0);
+                    Log.d(TAG, "item link: " + link);
+                    RssItem rssItem = new RssItem(title, img, description, link, date);
                     rssItemList.add(rssItem);
                 }
                 String channelHtml = document.select("channel").html();
                 String feedTitle = Jsoup.parseBodyFragment(channelHtml).select("title").first().text();
-                Log.d(TAG, "feedTitle: " + feedTitle);
                 RssFeed feed = new RssFeed(feedTitle, url, rssItemList);
                 subscriber.onNext(feed);
                 subscriber.onCompleted();

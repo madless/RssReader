@@ -3,6 +3,8 @@
     <string name="add_rss_item">Add rss item</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="menu_sort_date_asc">By oldest</string>
+    <string name="menu_sort_date_desc">By newest</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         Donec posuere gravida libero, sit amet congue nibh consectetur vitae.
         Cras magna lorem, porta eu eros nec, convallis ultrices dolor.

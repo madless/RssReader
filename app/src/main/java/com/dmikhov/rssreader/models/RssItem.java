@@ -9,15 +9,17 @@ public class RssItem extends RealmObject {
     private String title;
     private String image;
     private String description;
+    private String link;
     private long date;
 
     public RssItem() {}
 
-    public RssItem(String title, String image, String description, long date) {
+    public RssItem(String title, String image, String description, String link, long date) {
         this.title = title;
         this.image = image;
         this.description = description;
         this.date = date;
+        this.link = link;
     }
 
     public String getTitle() {
@@ -52,12 +54,25 @@ public class RssItem extends RealmObject {
         this.date = date;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
     @Override
     public String toString() {
         return "RssItem{" +
                 "title='" + title + '\'' +
                 ", image='" + image + '\'' +
                 ", description='" + description + '\'' +
+                ", link='" + link + '\'' +
                 ", date=" + date +
                 '}';
     }

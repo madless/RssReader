@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements OnRSSMenuClickLis
     }
 
     private void removeFragment(int position) {
-        Log.d(TAG, "removeFragment: " + position);
         pagerAdapter.removeFragment(position);
         pagerAdapter.notifyDataSetChanged();
         if(pagerAdapter.getCount() == 0) {
@@ -216,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements OnRSSMenuClickLis
     }
 
     @Override
-    public void onCachedRssFeedsLoaded(List<RssFeed> feeds) {
+    public void onRssFeedsLoaded(List<RssFeed> feeds) {
         if(feeds != null && !feeds.isEmpty()) {
             showViewPager();
             for (int i = 0; i < feeds.size(); i++) {

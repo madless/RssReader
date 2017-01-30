@@ -4,7 +4,10 @@ import com.dmikhov.rssreader.models.RssFeed;
 import com.dmikhov.rssreader.models.RssItem;
 import com.dmikhov.rssreader.mvp.BasePresenter;
 import com.dmikhov.rssreader.repo.RepositoryManager;
+import com.dmikhov.rssreader.utils.comparators.RssItemByDateAscComparator;
+import com.dmikhov.rssreader.utils.comparators.RssItemByDateDescComparator;
 
+import java.util.Collections;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -44,7 +47,7 @@ public class RssFragmentPresenter extends BasePresenter {
 
     public void updateData() {
         view.onRssRefreshingStarted();
-        RepositoryManager.get().getRssFeedByUrl(rssUrl).subscribeOn(Schedulers.io())
+        RepositoryManager.get().updateRssFeed(rssUrl).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<RssFeed>() {
                     @Override
@@ -54,5 +57,15 @@ public class RssFragmentPresenter extends BasePresenter {
                     }
                 });
 
+    }
+
+    public void sortByDateAsc() {
+        Collections.sort(rssItems, new RssItemByDateAscComparator());
+        view.onRssDataLoaded(rssItems);
+    }
+
+    public void sortByDateDesc() {
+        Collections.sort(rssItems, new RssItemByDateDescComparator());
+        view.onRssDataLoaded(rssItems);
     }
 }

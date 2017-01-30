@@ -9,6 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -36,6 +39,12 @@ public class RssFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     private RssAdapter adapter;
     private RssFragmentPresenter presenter;
     private OnLinkClickListener onLinkClickListener;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -115,6 +124,27 @@ public class RssFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         adapter.setItems(items);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_sort_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_sort_date_asc: {
+                presenter.sortByDateAsc();
+                break;
+            }
+            case R.id.menu_sort_date_desc: {
+                presenter.sortByDateDesc();
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public PresenterFactory<RssFragmentPresenter> getPresenterFactory() {
