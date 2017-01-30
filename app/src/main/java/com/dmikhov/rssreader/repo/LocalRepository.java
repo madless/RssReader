@@ -2,7 +2,9 @@ package com.dmikhov.rssreader.repo;
 
 import android.util.Log;
 
-import com.dmikhov.rssreader.models.RssFeed;
+import com.dmikhov.rssreader.entities.RssFeed;
+import com.dmikhov.rssreader.repo.abs.ILocalRepo;
+import com.dmikhov.rssreader.repo.abs.IUpdatableRepo;
 
 import java.util.List;
 
@@ -15,7 +17,7 @@ import static com.dmikhov.rssreader.utils.Const.TAG;
 /**
  * Created by madless on 29.01.2017.
  */
-public class LocalRepository implements ILocalRepo {
+public class LocalRepository implements ILocalRepo, IUpdatableRepo {
 
     @Override
     public Observable<List<RssFeed>> getAllRssFeeds() {

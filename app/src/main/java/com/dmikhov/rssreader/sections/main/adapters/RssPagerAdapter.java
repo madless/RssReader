@@ -1,7 +1,10 @@
-package com.dmikhov.rssreader.sections.main_navigation;
+package com.dmikhov.rssreader.sections.main.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.dmikhov.rssreader.sections.rss_feed.RssFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,27 +12,22 @@ import java.util.List;
 /**
  * Created by dmikhov on 27.01.2017.
  */
-public class RssPagerAdapter extends FragmentTagBasedPagerAdapter {
-    private List<Fragment> fragments = new ArrayList<>();
+public class RssPagerAdapter extends FragmentStatePagerAdapter {
+    private List<RssFragment> fragments = new ArrayList<>();
     private List<String> titles = new ArrayList<>();
 
     public RssPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    public RssPagerAdapter(FragmentManager fm, List<Fragment> fragments, List<String> titles) {
-        super(fm);
-        this.fragments = fragments;
-        this.titles = titles;
-    }
-
-    public void addFragment(Fragment fragment, String title) {
+    public void addFragment(RssFragment fragment, String title) {
         fragments.add(fragment);
         titles.add(title);
     }
 
     public void removeFragment(int position) {
-        fragments.remove(position);
+        RssFragment fragment = fragments.remove(position);
+        fragment.destroy();
         titles.remove(position);
     }
 
@@ -51,10 +49,5 @@ public class RssPagerAdapter extends FragmentTagBasedPagerAdapter {
     @Override
     public int getItemPosition(Object object) {
         return POSITION_NONE;
-    }
-
-    @Override
-    public String getTag(int position) {
-        return titles.get(position);
     }
 }

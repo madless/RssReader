@@ -1,4 +1,4 @@
-package com.dmikhov.rssreader.sections.main_navigation;
+package com.dmikhov.rssreader.sections.main.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dmikhov.rssreader.R;
-import com.dmikhov.rssreader.models.RssMenuItem;
+import com.dmikhov.rssreader.entities.RssMenuItem;
+import com.dmikhov.rssreader.sections.main.listeners.OnRSSMenuClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,6 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Na
     public void addItem(RssMenuItem item) {
         items.add(items.size() - 1, item);
         notifyDataSetChanged();
-//        notifyItemInserted(items.size());
     }
 
     public void removeItem(int position) {

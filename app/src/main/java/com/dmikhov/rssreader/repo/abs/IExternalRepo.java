@@ -1,6 +1,6 @@
-package com.dmikhov.rssreader.repo;
+package com.dmikhov.rssreader.repo.abs;
 
-import com.dmikhov.rssreader.models.RssFeed;
+import com.dmikhov.rssreader.entities.RssFeed;
 
 import rx.Observable;
 

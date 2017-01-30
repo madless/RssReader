@@ -1,6 +1,6 @@
-package com.dmikhov.rssreader.repo;
+package com.dmikhov.rssreader.repo.abs;
 
-import com.dmikhov.rssreader.models.RssFeed;
+import com.dmikhov.rssreader.entities.RssFeed;
 
 import java.util.List;
 
@@ -11,6 +11,5 @@ import rx.Observable;
  */
 public interface ILocalRepo extends IExternalRepo {
     Observable<List<RssFeed>> getAllRssFeeds();
-    void addRssFeed(RssFeed feed);
     void removeRssFeed(RssFeed feed);
 }

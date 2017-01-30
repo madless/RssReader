@@ -1,4 +1,4 @@
-package com.dmikhov.rssreader.models;
+package com.dmikhov.rssreader.entities;
 
 import io.realm.RealmObject;
 

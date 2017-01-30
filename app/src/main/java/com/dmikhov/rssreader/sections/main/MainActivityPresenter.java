@@ -1,18 +1,15 @@
-package com.dmikhov.rssreader.sections.main_navigation;
+package com.dmikhov.rssreader.sections.main;
 
-import android.util.Log;
-
-import com.dmikhov.rssreader.models.RssFeed;
+import com.dmikhov.rssreader.entities.RssFeed;
 import com.dmikhov.rssreader.mvp.BasePresenter;
 import com.dmikhov.rssreader.repo.RepositoryManager;
+import com.dmikhov.rssreader.sections.main.abs.IMainActivityView;
 
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static com.dmikhov.rssreader.utils.Const.TAG;
 
 /**
  * Created by madless on 29.01.2017.
@@ -31,7 +28,6 @@ public class MainActivityPresenter extends BasePresenter {
                     .subscribe(new Action1<List<RssFeed>>() {
                         @Override
                         public void call(List<RssFeed> rssFeeds) {
-                            Log.d(TAG, "rssFeeds: " + rssFeeds);
                             feeds = rssFeeds;
                             view.onRssFeedsLoaded(feeds);
                         }
@@ -42,7 +38,6 @@ public class MainActivityPresenter extends BasePresenter {
     }
 
     public void addRssFeed(String url) {
-        Log.d(TAG, "addRssFeed: url: " + url);
         if(isRssExistsAlready(url)) {
             view.onRssAlreadyExists();
         } else {
@@ -67,7 +62,6 @@ public class MainActivityPresenter extends BasePresenter {
     }
 
     public void removeRssFeed(int position) {
-        Log.d(TAG, "removeRssFeed: " + position);
         RssFeed feed = feeds.remove(position);
         RepositoryManager.get().removeRssFeed(feed);
     }

@@ -1,6 +1,6 @@
-package com.dmikhov.rssreader.sections.rss;
+package com.dmikhov.rssreader.sections.rss_feed.abs;
 
-import com.dmikhov.rssreader.models.RssItem;
+import com.dmikhov.rssreader.entities.RssItem;
 
 import java.util.List;
 
@@ -12,4 +12,5 @@ public interface IRssView {
     void onRssDataLoaded(List<RssItem> items);
     void onRssRefreshingStarted();
     void onRssDataRefreshed(List<RssItem> items);
+    void onLoadingError();
 }

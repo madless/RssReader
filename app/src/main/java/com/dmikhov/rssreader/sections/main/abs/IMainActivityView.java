@@ -1,6 +1,6 @@
-package com.dmikhov.rssreader.sections.main_navigation;
+package com.dmikhov.rssreader.sections.main.abs;
 
-import com.dmikhov.rssreader.models.RssFeed;
+import com.dmikhov.rssreader.entities.RssFeed;
 
 import java.util.List;
 

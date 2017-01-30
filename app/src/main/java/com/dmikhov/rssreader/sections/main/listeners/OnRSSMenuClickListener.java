@@ -1,4 +1,4 @@
-package com.dmikhov.rssreader.sections.main_navigation;
+package com.dmikhov.rssreader.sections.main.listeners;
 
 /**
  * Created by madless on 28.01.2017.

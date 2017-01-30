@@ -7,6 +7,7 @@ import android.util.Log;
  * Created by dmikhov on 27.01.2017.
  */
 public class PresenterCache {
+    private static final String TAG = "PresenterCache";
     private static PresenterCache instance = null;
 
     private SimpleArrayMap<String, BasePresenter> presenters;
@@ -44,5 +45,10 @@ public class PresenterCache {
         if (presenters != null) {
             presenters.remove(who);
         }
+    }
+
+    public void clearCache() {
+        Log.d(TAG, "destroy");
+        presenters.clear();
     }
 }

@@ -1,4 +1,4 @@
-package com.dmikhov.rssreader.sections.main_navigation;
+package com.dmikhov.rssreader.sections.main;
 
 import android.content.DialogInterface;
 import android.content.res.Configuration;
@@ -22,14 +22,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dmikhov.rssreader.R;
-import com.dmikhov.rssreader.models.RssFeed;
-import com.dmikhov.rssreader.models.RssMenuItem;
+import com.dmikhov.rssreader.entities.RssFeed;
+import com.dmikhov.rssreader.entities.RssMenuItem;
 import com.dmikhov.rssreader.mvp.PresenterCache;
 import com.dmikhov.rssreader.mvp.PresenterFactory;
-import com.dmikhov.rssreader.sections.DialogFragmentAddFeed;
+import com.dmikhov.rssreader.sections.main.abs.IMainActivityView;
+import com.dmikhov.rssreader.sections.main.adapters.NavigationAdapter;
+import com.dmikhov.rssreader.sections.main.adapters.RssPagerAdapter;
+import com.dmikhov.rssreader.sections.main.listeners.OnAddRssButtonClickListener;
+import com.dmikhov.rssreader.sections.main.listeners.OnRSSMenuClickListener;
+import com.dmikhov.rssreader.ui.dialogs.DialogFragmentAddFeed;
 import com.dmikhov.rssreader.sections.browser.InAppBrowserFragment;
-import com.dmikhov.rssreader.sections.rss.OnLinkClickListener;
-import com.dmikhov.rssreader.sections.rss.RssFragment;
+import com.dmikhov.rssreader.sections.rss_feed.listeners.OnLinkClickListener;
+import com.dmikhov.rssreader.sections.rss_feed.RssFragment;
 import com.dmikhov.rssreader.utils.Const;
 
 import java.util.List;
@@ -142,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements OnRSSMenuClickLis
     protected void onStop() {
         super.onStop();
         if(isFinishing() && !isChangingConfigurations()) {
-            PresenterCache.get().removePresenter(Const.MAIN_ACTIVITY_PRESENTER);
+            PresenterCache.get().clearCache();
         }
     }
 
@@ -178,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements OnRSSMenuClickLis
             @Override
             public void onAddRssButtonClick(String url) {
                 progressBar.setVisibility(View.VISIBLE);
-                tvNoData.setVisibility(View.GONE);
                 presenter.addRssFeed(url);
                 drawerLayout.closeDrawers();
             }
@@ -190,9 +194,7 @@ public class MainActivity extends AppCompatActivity implements OnRSSMenuClickLis
     @Override
     public void onRemoveItemClick(int position) {
         if(viewPager.getCurrentItem() == position) {
-            if(position == 0) {
-                //viewPager.setCurrentItem(position + 1);
-            } else {
+            if(position != 0) {
                 viewPager.setCurrentItem(position - 1);
             }
         }

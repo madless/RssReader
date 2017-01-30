@@ -1,6 +1,6 @@
 package com.dmikhov.rssreader.utils.comparators;
 
-import com.dmikhov.rssreader.models.RssItem;
+import com.dmikhov.rssreader.entities.RssItem;
 
 import java.util.Comparator;
 

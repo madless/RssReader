@@ -1,4 +1,4 @@
-package com.dmikhov.rssreader.sections;
+package com.dmikhov.rssreader.ui.dialogs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dmikhov.rssreader.R;
-import com.dmikhov.rssreader.sections.main_navigation.OnAddRssButtonClickListener;
+import com.dmikhov.rssreader.sections.main.listeners.OnAddRssButtonClickListener;
 
 /**
  * Created by madless on 28.01.2017.

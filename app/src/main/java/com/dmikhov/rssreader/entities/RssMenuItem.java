@@ -1,4 +1,4 @@
-package com.dmikhov.rssreader.models;
+package com.dmikhov.rssreader.entities;
 
 /**
  * Created by madless on 28.01.2017.
