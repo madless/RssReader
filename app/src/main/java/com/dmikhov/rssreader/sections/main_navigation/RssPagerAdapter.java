@@ -49,6 +49,11 @@ public class RssPagerAdapter extends FragmentTagBasedPagerAdapter {
     }
 
     @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
+    @Override
     public String getTag(int position) {
         return titles.get(position);
     }

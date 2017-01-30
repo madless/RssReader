@@ -35,6 +35,7 @@ public class RssFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
     private RssAdapter adapter;
     private RssFragmentPresenter presenter;
+    private OnLinkClickListener onLinkClickListener;
 
     @Nullable
     @Override
@@ -49,20 +50,29 @@ public class RssFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        try {
+            onLinkClickListener = (OnLinkClickListener) getActivity();
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+        Bundle bundle = getArguments();
+        String rssUrl = null;
+        if(bundle != null) {
+            rssUrl = bundle.getString(Const.EXTRA_DATA_RSS_URL);
+        }
         swipeRefreshLayout.setOnRefreshListener(this);
         initRecyclerView();
-        initPresenter();
+        initPresenter(rssUrl);
     }
 
-    private void initPresenter() {
+    private void initPresenter(String url) {
         presenter = PresenterCache.get().getPresenter(Const.RSS_FRAGMENT_PRESENTER + this.hashCode(), getPresenterFactory());
-        presenter.onStart();
+        presenter.onStart(url);
     }
 
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        adapter = new RssAdapter();
-        adapter.setListener(this);
+        adapter = new RssAdapter(onLinkClickListener);
         rvRss.setLayoutManager(layoutManager);
         rvRss.setAdapter(adapter);
     }
@@ -105,7 +115,6 @@ public class RssFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         adapter.setItems(items);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(getActivity(), "Refreshed!", Toast.LENGTH_SHORT).show();
     }
 
     public PresenterFactory<RssFragmentPresenter> getPresenterFactory() {

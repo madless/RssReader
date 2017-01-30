@@ -1,13 +1,17 @@
 package com.dmikhov.rssreader.models;
 
+import io.realm.RealmObject;
+
 /**
  * Created by dmikhov on 27.01.2017.
  */
-public class RssItem {
+public class RssItem extends RealmObject {
     private String title;
     private String image;
     private String description;
     private long date;
+
+    public RssItem() {}
 
     public RssItem(String title, String image, String description, long date) {
         this.title = title;

@@ -1,6 +1,5 @@
 package com.dmikhov.rssreader.sections.main_navigation;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -24,9 +23,9 @@ public abstract class FragmentTagBasedPagerAdapter extends PagerAdapter {
     private final FragmentManager mFragmentManager;
     private FragmentTransaction mCurTransaction = null;
 
-    private ArrayList<Fragment.SavedState> mSavedState = new ArrayList<>();
-    private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private ArrayList<String> savedFragmentTags = new ArrayList<>();
+    private ArrayList<Fragment.SavedState> mSavedState = new ArrayList<Fragment.SavedState>();
+    private ArrayList<String> mSavedFragmentTags = new ArrayList<String>();
+    private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
     private Fragment mCurrentPrimaryItem = null;
 
     public FragmentTagBasedPagerAdapter(FragmentManager fm) {
@@ -38,16 +37,15 @@ public abstract class FragmentTagBasedPagerAdapter extends PagerAdapter {
      */
     public abstract Fragment getItem(int position);
 
-    @Override
-    public void startUpdate(ViewGroup container) {
-        if (container.getId() == View.NO_ID) {
-            throw new IllegalStateException("ViewPager with adapter " + this
-                    + " requires a view id");
-        }
+    public String getTag(int position) {
+        return null;
     }
 
     @Override
-    @SuppressLint("CommitTransaction")
+    public void startUpdate(ViewGroup container) {
+    }
+
+    @Override
     public Object instantiateItem(ViewGroup container, int position) {
         // If we already have this item instantiated, there is nothing
         // to do.  This can happen when we are restoring the entire pager
@@ -66,9 +64,9 @@ public abstract class FragmentTagBasedPagerAdapter extends PagerAdapter {
 
         Fragment fragment = getItem(position);
         String fragmentTag = getTag(position);
-        if (DEBUG) Log.v(TAG, "Adding item #" + position + ": f=" + fragment);
+        if (DEBUG) Log.v(TAG, "Adding item #" + position + ": f=" + fragment + " t=" + fragmentTag);
         if (mSavedState.size() > position) {
-            String savedTag = savedFragmentTags.get(position);
+            String savedTag = mSavedFragmentTags.get(position);
             if (TextUtils.equals(fragmentTag, savedTag)) {
                 Fragment.SavedState fss = mSavedState.get(position);
                 if (fss != null) {
@@ -87,67 +85,25 @@ public abstract class FragmentTagBasedPagerAdapter extends PagerAdapter {
         return fragment;
     }
 
-    /*
-
-    public Object instantiateItem(ViewGroup container, int position) {
-        long tag = getItemId(position);
-        Fragment fragment = mFragments.get(tag);
-        // If we already have this item instantiated, there is nothing
-        // to do.  This can happen when we are restoring the entire pager
-        // from its saved state, where the fragment manager has already
-        // taken care of restoring the fragments we previously had instantiated.
-        if (fragment != null) {
-            return fragment;
-        }
-
-        if (mCurTransaction == null) {
-            mCurTransaction = mFragmentManager.beginTransaction();
-        }
-
-        fragment = getItem(position);
-        // restore state
-        final Fragment.SavedState savedState = mSavedStates.get(tag);
-        if (savedState != null) {
-            fragment.setInitialSavedState(savedState);
-        }
-        fragment.setMenuVisibility(false);
-        fragment.setUserVisibleHint(false);
-        mFragments.put(tag, fragment);
-        mCurTransaction.add(container.getId(), fragment, "f" + tag);
-
-        return fragment;
-    }
-
-     */
-
-
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        Fragment fragment = (Fragment) object;
+        Fragment fragment = (Fragment)object;
 
         if (mCurTransaction == null) {
             mCurTransaction = mFragmentManager.beginTransaction();
         }
         if (DEBUG) Log.v(TAG, "Removing item #" + position + ": f=" + object
-                + " v=" + ((Fragment)object).getView());
+                + " v=" + ((Fragment)object).getView() + " t=" + fragment.getTag());
         while (mSavedState.size() <= position) {
             mSavedState.add(null);
-            savedFragmentTags.add(null);
+            mSavedFragmentTags.add(null);
         }
-        mSavedState.set(position, fragment.isAdded() ? mFragmentManager.saveFragmentInstanceState(fragment) : null);
-        savedFragmentTags.set(position, fragment.getTag());
+        mSavedState.set(position, mFragmentManager.saveFragmentInstanceState(fragment));
+        mSavedFragmentTags.set(position, fragment.getTag());
         mFragments.set(position, null);
 
         mCurTransaction.remove(fragment);
     }
-
-    /*
-    mSavedState.set(position, mFragmentManager.saveFragmentInstanceState(fragment));
-    mSavedFragmentTags.set(position, fragment.getTag());
-    mFragments.set(position, null);
-
-    mCurTransaction.remove(fragment);
-     */
 
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
@@ -168,8 +124,9 @@ public abstract class FragmentTagBasedPagerAdapter extends PagerAdapter {
     @Override
     public void finishUpdate(ViewGroup container) {
         if (mCurTransaction != null) {
-            mCurTransaction.commitNowAllowingStateLoss();
+            mCurTransaction.commitAllowingStateLoss();
             mCurTransaction = null;
+            mFragmentManager.executePendingTransactions();
         }
     }
 
@@ -186,11 +143,11 @@ public abstract class FragmentTagBasedPagerAdapter extends PagerAdapter {
             Fragment.SavedState[] fss = new Fragment.SavedState[mSavedState.size()];
             mSavedState.toArray(fss);
             state.putParcelableArray("states", fss);
-            state.putStringArrayList("tags", savedFragmentTags);
+            state.putStringArrayList("tags", mSavedFragmentTags);
         }
         for (int i=0; i<mFragments.size(); i++) {
             Fragment f = mFragments.get(i);
-            if (f != null && f.isAdded()) {
+            if (f != null) {
                 if (state == null) {
                     state = new Bundle();
                 }
@@ -201,8 +158,6 @@ public abstract class FragmentTagBasedPagerAdapter extends PagerAdapter {
         return state;
     }
 
-    public abstract String getTag(int position);
-
     @Override
     public void restoreState(Parcelable state, ClassLoader loader) {
         if (state != null) {
@@ -211,11 +166,12 @@ public abstract class FragmentTagBasedPagerAdapter extends PagerAdapter {
             Parcelable[] fss = bundle.getParcelableArray("states");
             mSavedState.clear();
             mFragments.clear();
+
             ArrayList<String> tags = bundle.getStringArrayList("tags");
             if (tags != null) {
-                savedFragmentTags = tags;
+                mSavedFragmentTags = tags;
             } else {
-                savedFragmentTags.clear();
+                mSavedFragmentTags.clear();
             }
             if (fss != null) {
                 for (int i=0; i<fss.length; i++) {
