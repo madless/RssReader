@@ -1,6 +1,7 @@
 package com.dmikhov.rssreader.repo;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.dmikhov.rssreader.entities.RssFeed;
 import com.dmikhov.rssreader.entities.RssItem;
@@ -33,6 +34,7 @@ import static com.dmikhov.rssreader.utils.Const.RSS_XML_TAG_ITEM;
  * Created by dmikhov on 30.01.2017.
  */
 public class NetRepositoryUrlConnection implements IExternalRepo {
+    private static final String TAG = "NetRepositoryConnection";
 
     private static final String IMAGE_PATTERN = "<(/)?img[^>]*>";
     private static final String IMAGE_SRC_PATTERN = "src=\".*?\"";
@@ -40,9 +42,15 @@ public class NetRepositoryUrlConnection implements IExternalRepo {
 
     @Override
     public Observable<RssFeed> getRssFeedByUrl(final String url) {
+        Log.d(TAG, "getRssFeedByUrl: " + url);
         return Observable.create(new Observable.OnSubscribe<RssFeed>() {
             @Override
             public void call(Subscriber<? super RssFeed> subscriber) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 InputStream input = null;
                 HttpURLConnection connection = null;
                 try {

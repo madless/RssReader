@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="RSS Feed"
+        android:text="@string/rss_feed"
         android:id="@+id/tvDialogTitle"
         android:visibility="visible"
         android:textColor="@color/colorBlackLight"
@@ -22,7 +22,7 @@
         android:id="@+id/etRSSFeedLink"
         android:layout_width="@dimen/fragment_dialog_add_rss_width"
         android:layout_height="wrap_content"
-        android:hint="Input RSS feed link"
+        android:hint="@string/input_rss_feed_link"
         android:text="http://kotaku.com/rss"/>
 
     <LinearLayout
@@ -34,7 +34,7 @@
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:id="@+id/buttonDialogCancel"
             android:layout_gravity="right"
             android:layout_weight="1"
@@ -44,7 +44,7 @@
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Ok"
+            android:text="@string/ok"
             android:id="@+id/buttonDialogAdd"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:textColor="@color/colorAccent"

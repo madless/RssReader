@@ -1,12 +1,10 @@
 package com.dmikhov.rssreader.sections.rss_feed;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,6 +26,7 @@ import com.dmikhov.rssreader.sections.rss_feed.adapters.RssAdapter;
 import com.dmikhov.rssreader.sections.rss_feed.listeners.OnLinkClickListener;
 import com.dmikhov.rssreader.sections.rss_feed.listeners.OnRssItemClickListener;
 import com.dmikhov.rssreader.utils.Const;
+import com.dmikhov.rssreader.utils.DialogHelper;
 
 import java.util.List;
 
@@ -108,7 +107,6 @@ public class RssFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
     @Override
     public void onRssLoadingStarted() {
-        Log.d(TAG, "onRssLoadingStarted: ");
         progressBar.setVisibility(View.VISIBLE);
     }
 
@@ -127,15 +125,9 @@ public class RssFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
     @Override
     public void onLoadingError() {
-        final AlertDialog.Builder adb = new AlertDialog.Builder(getContext())
-                .setTitle("Error!").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .setMessage("Rss loading error. Please check Internet connection and url");
-        adb.show();
+        String title = getString(R.string.error);
+        String msg = getString(R.string.rss_loading_error);
+        DialogHelper.openMessageDialog(getContext(), title, msg);
     }
 
     @Override
@@ -167,6 +159,7 @@ public class RssFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     }
 
     public void destroy(){
+        Log.d(TAG, "destroy: " + rssUrl);
         PresenterCache.get().removePresenter(Const.RSS_FRAGMENT_PRESENTER + rssUrl);
     }
 

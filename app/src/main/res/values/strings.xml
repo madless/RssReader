@@ -21,4 +21,12 @@
         Duis sed lectus nibh.
         Sed scelerisque, neque ac tristique porta, erat velit aliquet augue, ac molestie nisi elit id metus.
         Pellentesque lacinia dictum posuere.</string>
+    <string name="no_data">No data</string>
+    <string name="rss_feed">RSS Feed</string>
+    <string name="input_rss_feed_link">Input RSS feed link</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+    <string name="error">Error!</string>
+    <string name="rss_already_exists">Rss already exists!</string>
+    <string name="rss_loading_error">Rss loading error. Please check Internet connection and url</string>
 </resources>

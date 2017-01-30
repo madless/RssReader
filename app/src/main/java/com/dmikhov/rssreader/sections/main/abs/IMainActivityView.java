@@ -12,4 +12,5 @@ public interface IMainActivityView {
     void onFeedAdded(RssFeed feed);
     void onRssAlreadyExists();
     void onRssLoadingError();
+    void onRssLoadingStarted();
 }

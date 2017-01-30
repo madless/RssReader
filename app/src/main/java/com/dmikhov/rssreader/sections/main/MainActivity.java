@@ -1,6 +1,5 @@
 package com.dmikhov.rssreader.sections.main;
 
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,12 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -26,20 +23,19 @@ import com.dmikhov.rssreader.entities.RssFeed;
 import com.dmikhov.rssreader.entities.RssMenuItem;
 import com.dmikhov.rssreader.mvp.PresenterCache;
 import com.dmikhov.rssreader.mvp.PresenterFactory;
+import com.dmikhov.rssreader.sections.browser.InAppBrowserFragment;
 import com.dmikhov.rssreader.sections.main.abs.IMainActivityView;
 import com.dmikhov.rssreader.sections.main.adapters.NavigationAdapter;
 import com.dmikhov.rssreader.sections.main.adapters.RssPagerAdapter;
 import com.dmikhov.rssreader.sections.main.listeners.OnAddRssButtonClickListener;
 import com.dmikhov.rssreader.sections.main.listeners.OnRSSMenuClickListener;
-import com.dmikhov.rssreader.ui.dialogs.DialogFragmentAddFeed;
-import com.dmikhov.rssreader.sections.browser.InAppBrowserFragment;
-import com.dmikhov.rssreader.sections.rss_feed.listeners.OnLinkClickListener;
 import com.dmikhov.rssreader.sections.rss_feed.RssFragment;
+import com.dmikhov.rssreader.sections.rss_feed.listeners.OnLinkClickListener;
+import com.dmikhov.rssreader.ui.dialogs.DialogFragmentAddFeed;
 import com.dmikhov.rssreader.utils.Const;
+import com.dmikhov.rssreader.utils.DialogHelper;
 
 import java.util.List;
-
-import static com.dmikhov.rssreader.utils.Const.TAG;
 
 public class MainActivity extends AppCompatActivity implements OnRSSMenuClickListener, OnLinkClickListener, IMainActivityView {
 
@@ -182,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements OnRSSMenuClickLis
         dialog.setOnAddButtonClickListener(new OnAddRssButtonClickListener() {
             @Override
             public void onAddRssButtonClick(String url) {
-                progressBar.setVisibility(View.VISIBLE);
                 presenter.addRssFeed(url);
                 drawerLayout.closeDrawers();
             }
@@ -205,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements OnRSSMenuClickLis
 
     @Override
     public void onLinkClicked(String url) {
-        Log.d(TAG, "onLinkClicked: " + url);
         Fragment fragment = new InAppBrowserFragment();
         Bundle bundle = new Bundle();
         bundle.putString(Const.EXTRA_DATA_LINK, url);
@@ -218,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements OnRSSMenuClickLis
 
     @Override
     public void onRssFeedsLoaded(List<RssFeed> feeds) {
+        progressBar.setVisibility(View.GONE);
         if(feeds != null && !feeds.isEmpty()) {
             showViewPager();
             for (int i = 0; i < feeds.size(); i++) {
@@ -229,8 +224,8 @@ public class MainActivity extends AppCompatActivity implements OnRSSMenuClickLis
 
     @Override
     public void onFeedAdded(RssFeed feed) {
+        progressBar.setVisibility(View.GONE);
         if(feed != null) {
-            progressBar.setVisibility(View.GONE);
             showViewPager();
             addNavigationItem(feed.getName());
             addFragmentToPager(feed);
@@ -240,29 +235,22 @@ public class MainActivity extends AppCompatActivity implements OnRSSMenuClickLis
     @Override
     public void onRssAlreadyExists() {
         progressBar.setVisibility(View.GONE);
-        final AlertDialog.Builder adb = new AlertDialog.Builder(this)
-                .setTitle("Error!").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .setMessage("Rss already exists!");
-        adb.show();
+        String title = getString(R.string.error);
+        String msg = getString(R.string.rss_already_exists);
+        DialogHelper.openMessageDialog(this, title, msg);
     }
 
     @Override
     public void onRssLoadingError() {
         progressBar.setVisibility(View.GONE);
-        final AlertDialog.Builder adb = new AlertDialog.Builder(this)
-                .setTitle("Error!").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .setMessage("Rss loading error. Please check Internet connection and url");
-        adb.show();
+        String title = getString(R.string.error);
+        String msg = getString(R.string.rss_loading_error);
+        DialogHelper.openMessageDialog(this, title, msg);
+    }
+
+    @Override
+    public void onRssLoadingStarted() {
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     public PresenterFactory<MainActivityPresenter> getPresenterFactory() {

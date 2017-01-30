@@ -1,7 +1,8 @@
 package com.dmikhov.rssreader.mvp;
 
-import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
+
+import java.util.HashMap;
 
 /**
  * Created by dmikhov on 27.01.2017.
@@ -10,7 +11,7 @@ public class PresenterCache {
     private static final String TAG = "PresenterCache";
     private static PresenterCache instance = null;
 
-    private SimpleArrayMap<String, BasePresenter> presenters;
+    private HashMap<String, BasePresenter> presenters;
 
     private PresenterCache() {}
 
@@ -24,7 +25,7 @@ public class PresenterCache {
     @SuppressWarnings("unchecked")
     public final <T extends BasePresenter> T getPresenter(String who, PresenterFactory<T> presenterFactory) {
         if (presenters == null) {
-            presenters = new SimpleArrayMap<>();
+            presenters = new HashMap<>();
         }
         T p = null;
         try {
@@ -43,12 +44,20 @@ public class PresenterCache {
 
     public final void removePresenter(String who) {
         if (presenters != null) {
-            presenters.remove(who);
+            BasePresenter p = presenters.remove(who);
+            if(p != null) {
+                p.onDestroy();
+            }
         }
     }
 
     public void clearCache() {
-        Log.d(TAG, "destroy");
+        Log.d(TAG, "clearCache()");
+        for (BasePresenter p: presenters.values()) {
+            if(p != null) {
+                p.onDestroy();
+            }
+        }
         presenters.clear();
     }
 }

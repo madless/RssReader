@@ -13,6 +13,7 @@ import com.dmikhov.rssreader.utils.comparators.RssItemByDateDescComparator;
 import java.util.Collections;
 import java.util.List;
 
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -26,6 +27,8 @@ public class RssFragmentPresenter extends BasePresenter {
     private List<RssItem> rssItems;
     private String rssUrl;
     private IRssView view;
+    private Subscription updateRssFeedSubscription;
+    private Subscription rssFeedByUrlSubscription;
 
     public void setView(IRssView view) {
         this.view = view;
@@ -35,8 +38,8 @@ public class RssFragmentPresenter extends BasePresenter {
         this.rssUrl = rssUrl;
         view.onRssLoadingStarted();
         Log.d(TAG, "onStart: " + rssItems);
-        if (rssItems == null) {
-            RepositoryManager.get().getRssFeedByUrl(rssUrl).subscribeOn(Schedulers.io())
+        if (rssFeedByUrlSubscription == null && rssItems == null) {
+            rssFeedByUrlSubscription = RepositoryManager.get().getRssFeedByUrl(rssUrl).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<RssFeed>() {
                         @Override
@@ -57,7 +60,7 @@ public class RssFragmentPresenter extends BasePresenter {
 
     public void updateData() {
         view.onRssRefreshingStarted();
-        RepositoryManager.get().updateRssFeed(rssUrl).subscribeOn(Schedulers.io())
+        updateRssFeedSubscription = RepositoryManager.get().updateRssFeed(rssUrl).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<RssFeed>() {
                     @Override
@@ -82,5 +85,16 @@ public class RssFragmentPresenter extends BasePresenter {
     public void sortByDateDesc() {
         Collections.sort(rssItems, new RssItemByDateDescComparator());
         view.onRssDataLoaded(rssItems);
+    }
+
+    @Override
+    public void onDestroy() {
+        if(updateRssFeedSubscription != null && !updateRssFeedSubscription.isUnsubscribed()) {
+            updateRssFeedSubscription.unsubscribe();
+        }
+        if(rssFeedByUrlSubscription != null && !rssFeedByUrlSubscription.isUnsubscribed()) {
+            rssFeedByUrlSubscription.unsubscribe();
+        }
+        super.onDestroy();
     }
 }

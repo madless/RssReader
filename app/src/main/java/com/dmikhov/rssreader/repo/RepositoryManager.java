@@ -1,5 +1,7 @@
 package com.dmikhov.rssreader.repo;
 
+import android.util.Log;
+
 import com.dmikhov.rssreader.entities.RssFeed;
 import com.dmikhov.rssreader.repo.abs.IExternalRepo;
 import com.dmikhov.rssreader.repo.abs.ILocalRepo;
@@ -13,6 +15,7 @@ import rx.functions.Func1;
  * Created by madless on 29.01.2017.
  */
 public class RepositoryManager implements ILocalRepo {
+    private static final String TAG = "RepositoryManager";
 
     private LocalRepository localRepository;
     private IExternalRepo netRepository;
@@ -45,6 +48,7 @@ public class RepositoryManager implements ILocalRepo {
         return localRepository.getRssFeedByUrl(url).switchIfEmpty(netRepository.getRssFeedByUrl(url).flatMap(new Func1<RssFeed, Observable<RssFeed>>() {
             @Override
             public Observable<RssFeed> call(RssFeed feed) {
+                Log.d(TAG, "localRepository is empty");
                 localRepository.addRssFeed(feed);
                 return localRepository.getRssFeedByUrl(url);
             }}));
